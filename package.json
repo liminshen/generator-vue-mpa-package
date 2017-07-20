@@ -1,6 +1,6 @@
 {
   "name": "generator-vue-mpa-package",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "基于vue2.x(全家桶)+webpack2.x的项目目录快速生成器",
   "homepage": "https://github.com/liminshen/generator-vue-mpa-package",
   "author": {
