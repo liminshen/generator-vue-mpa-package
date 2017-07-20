@@ -24,10 +24,16 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    var filename = [
+      './**/.*',
+      './**/*.*'
+    ]
     this.fs.copy(
-      this.templatePath('./**/*.*'),
-      this.templatePath('./**/.*'),
-      this.destinationPath('')
+      this.templatePath(filename),
+      this.destinationPath(''),
+      globOptions : {
+          dot : 'npmignore',
+      },
     );
   }
 
