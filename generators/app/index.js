@@ -29,7 +29,11 @@ module.exports = class extends Generator {
       './**/*.*'
     ]
     this.fs.copy(
-      this.templatePath(filename),
+      this.templatePath(filename[0]),
+      this.destinationPath(''),
+    );
+    this.fs.copy(
+      this.templatePath(filename[1]),
       this.destinationPath(''),
       {
         globOptions : {
