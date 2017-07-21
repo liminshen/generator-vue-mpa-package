@@ -1,4 +1,4 @@
-## 思清音乐移动端vue单页面项目脚手架2.0.0，项目所使用的工具如下
+## 移动端vue多页面项目脚手架2.0.0，项目所使用的工具如下
 > node -version 6.9.3
 
 - yarn
@@ -7,7 +7,7 @@
 ## How use it?
 download project
 
-    git clone git@139.196.126.103:sapling-team/generate-vue-spa2.0.git
+    git clone gitUrl
 
 remove git origin and add your project new origin
 
@@ -46,6 +46,9 @@ we can using npm scripts start dev product test
 |       |----- api         接口管理
 |       |
 |       |
+|       |----- apps        入口
+|       |
+|       |
 |       |----- components  组件
 |       |					|
 |       |					|
@@ -54,9 +57,6 @@ we can using npm scripts start dev product test
 |       |
 |       |
 |       |----- config      配置文件
-|       |
-|       |
-|       |----- filter      过滤器,修改、拦截数据
 |       |
 |       |
 |       |----- images      图片资源
@@ -68,7 +68,7 @@ we can using npm scripts start dev product test
 |       |----- util        工具
 |       |
 |       |
-|       |----- router       路由
+|       |----- router      路由
 |       |
 |       |
 |       |----- vuex        状态管理
@@ -77,7 +77,7 @@ we can using npm scripts start dev product test
 |       |----- app.vue     视图总入口
 |       |
 |       |
-|       |----- main.js     项目总入口
+|       |----- compile.config.json     多入口配置
 |
 |
 |----- .babelrc    babel配置

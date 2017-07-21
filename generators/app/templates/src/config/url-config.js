@@ -5,10 +5,10 @@ var config = {
 			"url_prefix": "https://api.leappmusic.cc"
 		},
 		"beta": {
-			"url_prefix": "https://demo-dev.leappmusic.cc",
+			"url_prefix": "https://api-dev.demo.cc",
 		},
 		"release": {
-			"url_prefix": "https://demo.leappmusic.cc",
+			"url_prefix": "https://api.demo.cc",
 		}
 	},
 	"prefix": "",
