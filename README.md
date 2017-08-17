@@ -1,5 +1,5 @@
 # generator-vue-mpa-package [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
-> 基于vue2.x(全家桶)+webpack2.x的项目目录快速生成器
+> 基于vue2.x(全家桶)+webpack2.x的多页面项目目录快速生成器
 
 ## Installation
 

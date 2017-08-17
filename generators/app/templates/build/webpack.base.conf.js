@@ -1,146 +1,84 @@
-/*
- ******************************************************
- *                      依赖引入                       *
- ******************************************************
- */
-const webpack = require('webpack')
-const path = require('path')
-const utils = require('./utils')
-const vueLoaderConfig = require('./vue.loader.conf.js')
-const HtmlwebpackPlugin = require('html-webpack-plugin')
-const alias = require('../config/alias.js')
-const getEntry = require('./getEntry.js')
-const compileConfig = require('../src/compile.config.json')
-/*
- ******************************************************
- *                      webpack配置                   *
- ******************************************************
- */
-var entrys = getEntry(path.join(__dirname, '../src/apps/*.js'));
-const config = {
-	entry: entrys,
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name].[hash:8].js',
-		chunkFilename: '[name].[hash:8].js'
-	},
-	module: {
-		rules :[
-			{
-				test: /\.jade$/,
-				loader: 'jade-loader',
-			},
-			{
-				test: /\.vue$/,
-				loader: 'vue-loader',
-				options: vueLoaderConfig
-			},
-			// {
-   //      test: /\.(js|vue)$/,
-   //      loader: 'eslint-loader',
-   //      enforce: 'pre',
-   //      include: [resolve('src'), resolve('test')],
-   //      options: {
-   //        formatter: require('eslint-friendly-formatter')
-   //      }
-   //    },
-			{
-				test: /\.js$/,
-				loader: 'babel-loader',
-				include: [resolve('src'), resolve('test')]
-			},
-			{
-				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-				loader: 'url-loader',
-				query: {
-					limit: 8192,
-					name: 'img/[name].[hash:7].[ext]'
-				}
-			}, {
-				test: /\.(ttf|eot|svg)(\?[a-z0-9]+)?$/,
-				// test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "file-loader?name=fonts/[name].[ext]"
-			}, {
-				// test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				test: /\.woff(2)?(\?[a-z0-9]+)?$/,
-				loader: "url-loader?limit=10000&name=fonts/[name].[ext]&minetype=application/font-woff"
-			},
-		]
-	},
-	plugins: [
-		//抽离公共js
-		new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
-    }),
-		//配置环境变量
-		new webpack.DefinePlugin({
-			process:{
-				env:{
-					NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-				}
-			}
-		}),
-		//报错但不退出webpack进程
-		new webpack.NoEmitOnErrorsPlugin(),
-		//这里是打包文件头部注释！
-		new webpack.BannerPlugin("leappmusic is a good app"),
-    //兼容webpack1.0的写法
-		new webpack.LoaderOptionsPlugin({
-      options: {}
-    })
-	],
-	resolve: {
-		modules: ['node_modules', path.join(__dirname, '../../leappmusic/leapmusic-plugins')],
-		extensions: ['.js' , '.json','.vue'],
-		alias: alias
-	}
-}
-var pages = getEntry(path.join(__dirname, '../src/web/*.jade'));
-for (var chunkname in pages) {
-  var conf = {
-    filename: chunkname+'.html',
-    template: pages[chunkname],
-    inject: true,
-    minify: {
-      removeComments: true,
-      collapseWhitespace: false
-    },
-    hash: true,
-    // chunksSortMode: 'dependency',
-    chunks : ['vendor',chunkname,'manifest'],
-    complieConfig: compileConfig
-  }
-  var titleC = compileConfig.title || {};
-  var title = titleC[chunkname];
-  if (title) {
-    conf.title = title;
-  }
-  config.plugins.push(new HtmlwebpackPlugin(conf));
-}
-/*
- ******************************************************
- *                      function                     *
- ******************************************************
- */
+var path = require('path')
+var utils = require('./utils')
+var config = require('../config')
+var vueLoaderConfig = require('./vue-loader.conf')
+const containerPath = path.resolve('./')
+const getEntry =  require('./getEntry.js');
 function resolve (dir) {
-	return path.join(__dirname, '..', dir)
+  return path.join(__dirname, '..', dir)
 }
-
-///////无bug咒语\\\\\\\\\
-module.exports = config;
+var entrys = getEntry('./src/*.js');
+module.exports = {
+  entry: entrys,
+  output: {
+    path: config.build.assetsRoot,
+    filename: '[name].js',
+    publicPath: process.env.NODE_ENV === 'production'
+      ? config.build.assetsPublicPath
+      : config.dev.assetsPublicPath
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      '@components' : path.resolve(containerPath+'/src/components'),
+      '@apply' : path.resolve(containerPath+'/src/components/apply'),
+      '@api' : path.resolve(containerPath+'/src/api/index.js'),
+      '@jsBridge' : path.resolve(containerPath+'/src/util/jsBridge.js'),
+      'lp-jsBridge' : path.resolve(containerPath+'/src/util/jsBridge.js'),
+      'lp-rem' : path.resolve(containerPath+'/src/util/rem.js'),
+      'lp-cookie' : path.resolve(containerPath+'/src/util/cookie.js'),
+      'lp-testEqui' : path.resolve(containerPath+'/src/util/lp-testEqui/index.js'),
+      'vue$': 'vue/dist/vue.js',
+      'vue-router$': 'vue-router/dist/vue-router.common.js',
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src')
+    }
+  },
+  module: {
+    rules: [
+      // {
+      //   test: /\.(js|vue)$/,
+      //   loader: 'eslint-loader',
+      //   enforce: 'pre',
+      //   include: [resolve('src'), resolve('test')],
+      //   options: {
+      //     formatter: require('eslint-friendly-formatter')
+      //   }
+      // },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: vueLoaderConfig
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [resolve('src'), resolve('test')]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('media/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        }
+      }
+    ]
+  }
+}

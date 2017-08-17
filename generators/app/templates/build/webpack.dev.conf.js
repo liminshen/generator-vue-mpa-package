@@ -1,45 +1,45 @@
-/*
- ******************************************************
- *                      依赖引入                       *
- ******************************************************
- */
-const webpack = require('webpack')
-const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const HtmlwebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const utils = require('./utils')
-const baseWebpackConfig = require('./webpack.base.conf.js')
-const merge = require('webpack-merge');
-/*
- ******************************************************
- *                      webpack配置									  *
- *                         dev                        *
- ******************************************************
- */
+var utils = require('./utils')
+var webpack = require('webpack')
+var config = require('../config')
+var merge = require('webpack-merge')
+var baseWebpackConfig = require('./webpack.base.conf')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const getEntry =  require('./getEntry.js')
+
+var htmls = getEntry('./publish/*.html')
+const getHtmlTpl = ()=>{
+  var result = [];
+  for(let name in htmls){
+    var tpl = htmls[name];
+    result.push(new HtmlWebpackPlugin({
+      filename: [name]+'.html',
+      template: tpl,
+      inject: true,
+      chunks : [name]
+    }))
+  }
+  return result;
+}
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-});
-const prodConfig = {
-	module: {
-		rules: utils.styleLoaders({
-			extract: false
-		})
-	},
-	plugins : [
-		// new HtmlwebpackPlugin({
-		// 	title: 'spa for backbone',
-		// 	template: './index.html',
-		// 	filename: 'index.html',
-		// 	chunksSortMode: 'dependency',
-		// 	hash: false,
-		// 	inject: true
-		// }),
-		new webpack.HotModuleReplacementPlugin(),
- 		new FriendlyErrorsPlugin()
-	]
-};
-// const webpackConfig =
-///////无bug咒语\\\\\\\\\
-module.exports = merge(baseWebpackConfig,prodConfig);
+})
+
+module.exports = merge(baseWebpackConfig, {
+  module: {
+    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+  },
+  // cheap-module-eval-source-map is faster for development
+  devtool: '#cheap-module-eval-source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': config.dev.env
+    }),
+    // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    ...getHtmlTpl(),
+    new FriendlyErrorsPlugin()
+  ]
+})

@@ -1,92 +1,30 @@
-## 移动端vue多页面项目脚手架2.0.0，项目所使用的工具如下
-> node -version 6.9.3
+# awesome-vue
 
-- yarn
-- webpack
+> A Vue.js project
 
-## How use it?
-download project
+## Build Setup
 
-    git clone gitUrl
+``` bash
+# install dependencies
+npm install
 
-remove git origin and add your project new origin
+# serve with hot reload at localhost:8080
+npm run dev
 
-    git remote remove origin
+# build for production with minification
+npm run build
 
-    git remote add origin gitUrl
+# build for production and view the bundle analyzer report
+npm run build --report
 
-    git pull
+# run unit tests
+npm run unit
 
-pack install
+# run e2e tests
+npm run e2e
 
-    yarn install
-
-we can using npm scripts start dev product test
-
-    npm run build 打包出生产环境代码
-    npm run build-dev 打包出开发环境代码
-    npm run dev 启动webpack dev构建环境
-
-## 目录结构
-
+# run all tests
+npm test
 ```
-|
-|----- build   脚手架配置环境
-|
-|
-|----- config  环境配置文件
-|
-|
-|----- dist    生产打包文件
-|
-|
-|----- src     开发环境文件
-|       |
-|       |
-|       |----- api         接口管理
-|       |
-|       |
-|       |----- apps        入口
-|       |
-|       |
-|       |----- components  组件
-|       |					|
-|       |					|
-|       |					|----- page   页面入口
-|       |
-|       |
-|       |
-|       |----- config      配置文件
-|       |
-|       |
-|       |----- images      图片资源
-|       |
-|       |
-|       |----- stylesheets 样式
-|       |
-|       |
-|       |----- util        工具
-|       |
-|       |
-|       |----- router      路由
-|       |
-|       |
-|       |----- vuex        状态管理
-|       |
-|       |
-|       |----- app.vue     视图总入口
-|       |
-|       |
-|       |----- compile.config.json     多入口配置
-|
-|
-|----- .babelrc    babel配置
-|
-|
-|----- .eslintrc   eslint配置
-|
-|
-|----- .babelrc    babel配置
-|
-|
-```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
